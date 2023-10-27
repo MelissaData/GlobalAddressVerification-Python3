@@ -1,4 +1,3 @@
-
 import json
 from threading import local
 import requests
@@ -43,9 +42,9 @@ def get_contents(base_service_url, request_query):
 
     print("API Call: ")
     for i in range(0, len(url), 70):
-        try:
+        if i + 70 < len(url):
             print(url[i:i+70])
-        except:
+        else:
             print(url[i:len(url)])
     print("\nAPI Response:")
     print(pretty_response)
