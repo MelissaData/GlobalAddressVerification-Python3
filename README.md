@@ -62,8 +62,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Download this project
 ```
-$ git clone https://github.com/MelissaData/GlobalAddressVerification-Python3
-$ cd GlobalAddressVerification-Python3
+git clone https://github.com/MelissaData/GlobalAddressVerification-Python3
+cd GlobalAddressVerification-Python3
 ```
 
 ## Windows
@@ -107,15 +107,15 @@ There are two modes:
 
 	The script will prompt the user for input(s), then use the provided input(s) to call the Cloud API. For example:
 	```
-	$ .\GlobalAddressVerificationPython3.ps1
+	.\GlobalAddressVerificationPython3.ps1
 	```
 
 - Command Line 
 
 	You can pass a company, addressline1, locality, administrative area, postal code, country and a license string into `-addressline1`, `-locality`, `-administrativearea`, `-postal`, `-country` and `-license` parameters respectively to test the Cloud API. For example:
 	```
-    $ .\GlobalAddressVerificationPython3.ps1 -addressline1 "22382 Avenida Empresa" -locality "Rancho Santa Margarita" -administrativearea "CA" -postal "92688" -country "United States"
-    $ .\GlobalAddressVerificationPython3.ps1 -addressline1 "22382 Avenida Empresa" -locality "Rancho Santa Margarita" -administrativearea "CA" -postal "92688" -country "United States" -license "<your_license_string>"
+    .\GlobalAddressVerificationPython3.ps1 -addressline1 "22382 Avenida Empresa" -locality "Rancho Santa Margarita" -administrativearea "CA" -postal "92688" -country "United States"
+    .\GlobalAddressVerificationPython3.ps1 -addressline1 "22382 Avenida Empresa" -locality "Rancho Santa Margarita" -administrativearea "CA" -postal "92688" -country "United States" -license "<your_license_string>"
     ```
 
 This is the expected output from a successful setup for interactive mode:
@@ -170,15 +170,15 @@ There are two modes:
 
 	The script will prompt the user for input(s), then use the provided input(s) to call the Cloud API. For example:
 	```
-	$ ./GlobalAddressVerificationPython3.sh
+	./GlobalAddressVerificationPython3.sh
 	```
 
 - Command Line 
 
 	You can pass an address line 1, locality, administrative area, postal code, country, and a license string into `--addressline1`, `--locality`, `--administrativearea`, `--postal`, `--country` and `--license` parameters respectively to test the Cloud API. For example:
 	```
-    $ ./GlobalAddressVerificationPython3.sh --addressline1 "22382 Avenida Empresa" --locality "Rancho Santa Margarita" --administrativearea "CA" --postal "92688" --country "United States"
-    $ ./GlobalAddressVerificationPython3.sh --addressline1 "22382 Avenida Empresa" --locality "Rancho Santa Margarita" --administrativearea "CA" --postal "92688" --country "United States" --license "<your_license_string>"
+    ./GlobalAddressVerificationPython3.sh --addressline1 "22382 Avenida Empresa" --locality "Rancho Santa Margarita" --administrativearea "CA" --postal "92688" --country "United States"
+    ./GlobalAddressVerificationPython3.sh --addressline1 "22382 Avenida Empresa" --locality "Rancho Santa Margarita" --administrativearea "CA" --postal "92688" --country "United States" --license "<your_license_string>"
     ```
 
 This is the expected output from a successful setup for interactive mode:
