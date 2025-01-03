@@ -7,11 +7,11 @@ Please feel free to copy or embed this code to your own project. Happy coding!
 
 For the latest Melissa Global Address Verification release notes, please visit: https://releasenotes.melissa.com/cloud-api/global-address-verification/
 
-For further documentation, please visit: https://www.melissa.com/quickstart-guides/global-address
+For further documentation, please visit: https://docs.melissa.com/cloud-api/global-address-verification/global-address-verification-index.html
 
 The console will ask the user for:
 
-- AddressLine1
+- AddressLine1z
 - Locality
 - AdministrativeArea
 - PostalCode
@@ -187,7 +187,7 @@ This is the expected output from a successful setup for interactive mode:
 
 
 ## Result Codes
-For details about the result codes please refer to https://wiki.melissadata.com/index.php?title=Result_Code_Details#Global_Address_Verification
+For details about the result codes please refer to https://docs.melissa.com/melissa/result-codes/result-codes-index.html
 
 ## Contact Us
 For free technical support, please call us at 800-MELISSA ext. 4 (800-635-4772 ext. 4) or email us at tech@melissa.com.
