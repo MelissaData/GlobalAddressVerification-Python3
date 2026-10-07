@@ -1,3 +1,23 @@
+"""
+Global Address Verification verifies, standardizes and corrects postal addresses for
+countries around the world, returning the cleaned address along with result codes
+that describe its quality.
+
+High-level flow of this sample:
+  1. ARGS    - main reads any --flag values off the command line with argparse.
+  2. INPUT   - call_api fills in whatever wasn't supplied via interactive prompts.
+  3. REQUEST - call_api builds the REST query string (license + input fields).
+  4. CALL    - get_contents issues the GET request and pretty-prints the JSON response.
+
+This sample is a thin HTTP client: it builds a query string, sends a GET request to
+the Global Address Verification Cloud API, and prints the JSON response.
+
+Reference:
+  - Documentation: https://docs.melissa.com/cloud-api/global-address-verification/global-address-verification-index.html
+  - Release notes: https://releasenotes.melissa.com/cloud-api/global-address-verification/
+  - Result codes:  https://docs.melissa.com/melissa/result-codes/result-codes-index.html
+"""
+
 import json
 from threading import local
 import requests
@@ -5,6 +25,14 @@ import argparse
 import urllib.parse
 
 def main():
+  """
+  Entry point. Reads the optional command-line arguments, then hands control to
+  call_api, which performs the actual request/response cycle.
+
+  Recognized flags (each followed by its value, e.g. --locality "Rancho Santa Margarita"):
+  --license/-l, --addressline1, --locality, --administrativearea, --postalcode, --country.
+  Any flag not supplied is None, and call_api prompts for it interactively.
+  """
   base_service_url = "https://address.melissadata.net/"
   service_endpoint = "v3/WEB/GlobalAddress/doGlobalAddress"; #please see https://www.melissa.com/developer/global-address for more endpoints
 
@@ -30,11 +58,22 @@ def main():
   postalcode = args.postalcode
   country = args.country
 
+  # Run the verification with whatever values were passed on the command line.
   call_api(base_service_url, service_endpoint, license, addressline1, locality, administrativearea, postalcode, country)
 
 def get_contents(base_service_url, request_query):
+    """
+    Issues the GET request against the Global Address Verification endpoint and
+    pretty-prints the API call and the JSON response to the console.
+
+    Args:
+        base_service_url: The Global Address Verification Cloud API base URL.
+        request_query: The endpoint path plus query string built by call_api.
+    """
     url = urllib.parse.urljoin(base_service_url, request_query)
     response = requests.get(url)
+
+    # Re-serialize with indentation so the raw response is easier to read.
     obj = json.loads(response.text)
     pretty_response = json.dumps(obj, indent=4)
 
@@ -50,6 +89,24 @@ def get_contents(base_service_url, request_query):
     print(pretty_response)
 
 def call_api(base_service_url, service_endpoint, license, addressline1, locality, administrativearea, postalcode, country):
+    """
+    Drives the interactive/CLI loop: gathers the required address fields, builds and
+    submits the REST query, prints the result, and optionally repeats for another record.
+
+    It runs a single pass and exits only when every address field was supplied on the
+    command line. Otherwise it loops, asking for a new record each pass until the user
+    answers "N".
+
+    Args:
+        base_service_url: The Global Address Verification Cloud API base URL.
+        service_endpoint: The specific Global Address Verification endpoint path to call.
+        license: The Melissa license string sent with every request.
+        addressline1: A street address to verify, or None to prompt for it.
+        locality: A locality (city) to verify, or None to prompt for it.
+        administrativearea: An administrative area (state/province), or None to prompt for it.
+        postalcode: A postal code to verify, or None to prompt for it.
+        country: A country to verify, or None to prompt for it.
+    """
     print("\n====== WELCOME TO MELISSA GLOBAL ADDRESS VERIFICATION CLOUD API ======\n")
 
     should_continue_running = True
@@ -59,6 +116,7 @@ def call_api(base_service_url, service_endpoint, license, addressline1, locality
         input_administrativearea = ""
         input_postalcode = ""
         input_country = ""
+        # No values were supplied via command line, so prompt for every field.
         if not addressline1 and not locality and not administrativearea and not postalcode and not country:
             print("\nFill in each value to see results")
             input_addressline1 = input("Addressline1: ")
@@ -67,12 +125,14 @@ def call_api(base_service_url, service_endpoint, license, addressline1, locality
             input_postalcode = input("Postal: ")
             input_country = input("Country: ")
         else:
+            # At least one field was supplied via command line; use those values as-is.
             input_addressline1 = addressline1
             input_locality = locality
             input_administrativearea = administrativearea
             input_postalcode = postalcode
             input_country = country
 
+        # Prompt individually for any still-missing required field.
         while not input_addressline1 or not input_locality or not input_administrativearea or not input_postalcode or not input_country:
             print("\nFill in each value to see results")
             if not input_addressline1:
@@ -86,6 +146,8 @@ def call_api(base_service_url, service_endpoint, license, addressline1, locality
             if not input_country:
                 input_country = input("\nCountry: ")
 
+        # Map input fields to the API's expected query parameter names and
+        # request a JSON response.
         inputs = {
             "format": "json",
             "a1": input_addressline1,
@@ -131,6 +193,8 @@ def call_api(base_service_url, service_endpoint, license, addressline1, locality
 
         is_valid = False;
 
+        # If every address field came from the command line, treat this as a one-shot
+        # run rather than looping for additional records.
         if (addressline1 is not None) and (locality is not None) and (administrativearea is not None) and (postalcode is not None) and (country is not None):
             address = addressline1 + locality + administrativearea + postalcode + country
         else:
@@ -140,6 +204,8 @@ def call_api(base_service_url, service_endpoint, license, addressline1, locality
             is_valid = True
             should_continue_running = False
 
+        # Otherwise ask whether to test another record. Keep prompting until we get a
+        # valid Y/N. "N" ends the program; "Y" falls through to another pass.
         while not is_valid:
             test_another_response = input("\nTest another record? (Y/N)")
             if test_another_response != '':
